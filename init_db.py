@@ -2,7 +2,7 @@ import psycopg2
 
 print('Begin migration...')
 
-conn = psycopg2.connect(database="postgres", user = "postgres", password = "postgres", host = "db", port = "5432")
+conn = psycopg2.connect(database="postgres", user="postgres", password="postgres", host="db", port="5432")
 print('Opened database successfully')
 
 cur = conn.cursor()
