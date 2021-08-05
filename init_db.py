@@ -6,21 +6,27 @@ conn = psycopg2.connect(database="postgres", user = "postgres", password = "post
 print('Opened database successfully')
 
 cur = conn.cursor()
+
+cur.execute('''DROP TABLE IF EXISTS conversions,clicks,impressions;''')
+
 cur.execute('''CREATE TABLE impressions
       (banner_id    INT,
        campaign_id  INT,
+       quarter      INT NOT NULL,
        PRIMARY KEY (banner_id,campaign_id));''')
 
 cur.execute('''CREATE TABLE clicks
-      (click_id    INT PRIMARY KEY,
-       banner_id    INT NOT NULL,
-       campaign_id  INT NOT NULL,
+      (click_id         INT PRIMARY KEY,
+       banner_id        INT NOT NULL,
+       campaign_id      INT NOT NULL,
+       quarter          INT NOT NULL,
        FOREIGN KEY (banner_id,campaign_id) REFERENCES impressions (banner_id,campaign_id));''')
 
 cur.execute('''CREATE TABLE conversions
       (conversion_id    INT PRIMARY KEY,
        click_id         INT NOT NULL,
        revenue          INT NOT NULL,
+       quarter          INT NOT NULL,
        FOREIGN KEY (click_id) REFERENCES clicks (click_id));''')
 
 print('Tables created successfully')
