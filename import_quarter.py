@@ -121,5 +121,5 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(format='%(asctime)s %(message)s', filename='import_quarter.log', encoding='utf-8', level=logging.DEBUG)
+    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', filename='import_quarter.log', encoding='utf-8', level=logging.DEBUG)
     main(sys.argv[1:])
