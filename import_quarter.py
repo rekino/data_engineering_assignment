@@ -12,9 +12,9 @@ def import_impressions(conn, file, quarter):
         if i % 100 == 0:
             conn.commit()
         try:
-            res = cur.execute("SELECT * FROM impressions WHERE banner_id=%s AND campaign_id=%s", (row[0], row[1])).fetchone()
+            cur.execute("SELECT * FROM impressions WHERE banner_id=%s AND campaign_id=%s", (row[0], row[1]))
 
-            duplicate = res is not None
+            duplicate = cur.fetchone() is not None
 
             if duplicate:
                 logging.warning(f'duplicate impression in {file.name} line {i+2}: ({row[0]}, {row[1]})')
@@ -38,9 +38,9 @@ def import_clicks(conn, file, quarter):
         if i % 100 == 0:
             conn.commit()
         try:
-            res = cur.execute("SELECT * FROM clicks WHERE click_id=%s", (row[0], )).fetchone()
+            cur.execute("SELECT * FROM clicks WHERE click_id=%s", (row[0], ))
 
-            duplicate = res is not None
+            duplicate = cur.fetchone() is not None
 
             if duplicate:
                 logging.warning(f'duplicate click in {file.name} line {i+2}: ({row[0]}, {row[1]}, {row[2]})')
@@ -64,9 +64,9 @@ def import_conversions(conn, file, quarter):
         if i % 100 == 0:
             conn.commit()
         try:
-            res = cur.execute("SELECT * FROM conversions WHERE conversion_id=%s", (row[0], )).fetchone()
+            cur.execute("SELECT * FROM conversions WHERE conversion_id=%s", (row[0], ))
 
-            duplicate = res is not None
+            duplicate = cur.fetchone() is not None
 
             if duplicate:
                 logging.warning(f'duplicate conversion in {file.name} line {i+2}: ({row[0]}, {row[1]}, {row[2]})')
