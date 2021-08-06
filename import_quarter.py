@@ -12,19 +12,15 @@ def import_impressions(conn, file, quarter):
         if i % 100 == 0:
             conn.commit()
         try:
-            cur.execute(f'''SELECT 1 FROM impressions WHERE banner_id={row[0]} AND campaign_id={row[1]}''')
-            query = cur.fetchall()
+            res = cur.execute("SELECT * FROM impressions WHERE banner_id=%s AND campaign_id=%s", (row[0], row[1])).fetchone()
 
-            duplicate = False
-            for _ in query:
-                duplicate = True
-                break
+            duplicate = res is not None
 
             if duplicate:
                 logging.warning(f'duplicate impression in {file.name} line {i+2}: ({row[0]}, {row[1]})')
                 continue
 
-            cur.execute(f'''INSERT INTO impressions (banner_id,campaign_id) VALUES ({row[0]},{row[1]})''')
+            cur.execute("INSERT INTO impressions (banner_id,campaign_id) VALUES (%s,%s)", (row[0], row[1]))
 
             count += 1
         except Exception as error:
@@ -42,19 +38,15 @@ def import_clicks(conn, file, quarter):
         if i % 100 == 0:
             conn.commit()
         try:
-            cur.execute(f'''SELECT 1 FROM clicks WHERE click_id={row[0]}''')
-            query = cur.fetchall()
+            res = cur.execute("SELECT * FROM clicks WHERE click_id=%s", (row[0], )).fetchone()
 
-            duplicate = False
-            for _ in query:
-                duplicate = True
-                break
+            duplicate = res is not None
 
             if duplicate:
                 logging.warning(f'duplicate click in {file.name} line {i+2}: ({row[0]}, {row[1]}, {row[2]})')
                 continue
 
-            cur.execute(f'''INSERT INTO clicks (click_id,banner_id,campaign_id,quarter) VALUES ({row[0]},{row[1]},{row[2]},{quarter})''')
+            cur.execute("INSERT INTO clicks (click_id,banner_id,campaign_id,quarter) VALUES (%s,%s,%s,%s)", (row[0], row[1], row[2], quarter))
 
             count += 1
         except Exception as error:
@@ -72,19 +64,15 @@ def import_conversions(conn, file, quarter):
         if i % 100 == 0:
             conn.commit()
         try:
-            cur.execute(f'''SELECT 1 FROM conversions WHERE conversion_id={row[0]}''')
-            query = cur.fetchall()
+            res = cur.execute("SELECT * FROM conversions WHERE conversion_id=%s", (row[0], )).fetchone()
 
-            duplicate = False
-            for _ in query:
-                duplicate = True
-                break
+            duplicate = res is not None
 
             if duplicate:
                 logging.warning(f'duplicate conversion in {file.name} line {i+2}: ({row[0]}, {row[1]}, {row[2]})')
                 continue
 
-            cur.execute(f'''INSERT INTO conversions (conversion_id,click_id,revenue) VALUES ({row[0]},{row[1]},{row[2]})''')
+            cur.execute("INSERT INTO conversions (conversion_id,click_id,revenue) VALUES (%s,%s,%s)", (row[0], row[1], row[2]))
 
             count += 1
         except Exception as error:
