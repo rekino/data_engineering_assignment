@@ -24,40 +24,28 @@ def get(campaign_id):
 
     cur = db.cursor()
 
-    query = f'''SELECT SUM(clicks), SUM(conversions)
-            FROM banners_with_conversions_{quarter}
-            WHERE campaign_id=%s
-            '''
-
-    cur.execute(query, (campaign_id, ))
-
-    clicks, conversions = cur.fetchone()
-
-    size = 5
-
-    if conversions >= 10:
-        size = 10
-    
-    if conversions in range(5, 10):
-        size = conversions
-
-    query = f'''SELECT banner_id
+    query = f'''SELECT banner_id, clicks, conversions
             FROM banners_with_conversions_{quarter}
             WHERE campaign_id=%s
             ORDER BY conversions DESC, clicks DESC
             '''
     cur.execute(query, (campaign_id, ))
 
-    if conversions == 0 and clicks < 5:
-        banners = cur.fetchall()
-        top, bottom = banners[:clicks], banners[clicks:]
-        random.shuffle(bottom)
-        banners = top + bottom[:5-clicks]
-    else:
-        banners = cur.fetchmany(size=size)
-        
-    random.shuffle(banners)
+    rows = cur.fetchall()
 
+    banners = []
+    for i in range(10):
+        row = rows[0]
+        if row[2] > 0:
+            banners.append(rows.pop(0))
+        elif i > 4:
+            break
+        elif row[1] > 0:
+            banners.append(rows.pop(0))
+        else:
+            banners.append(rows.pop(random.randint(0, len(rows) - 1)))
+
+    random.shuffle(banners)
     banner = banners.pop()[0]
     last_banner = get_dict()
     if last_banner[request.remote_addr] == banner:
