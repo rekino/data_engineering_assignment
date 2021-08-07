@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Campaign {{campaign.id}}{% endblock %}
 
 {% block content %}
-<p>Campaign {{campaign}}</p>
+<img src="{{ url_for('static', filename=campaign.banner) }}" alt="">
 {% endblock %}
