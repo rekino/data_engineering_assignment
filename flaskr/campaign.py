@@ -18,18 +18,25 @@ def get_dict():
 
 @bp.route('/<int:campaign_id>')
 def get(campaign_id):
-    quarter = f'q{datetime.now().time().minute // 15 + 1}'
+    quarter = datetime.now().time().minute // 15 + 1
 
     db = get_db()
 
     cur = db.cursor()
 
-    query = f'''SELECT banner_id, clicks, conversions
-            FROM banners_with_conversions_{quarter}
-            WHERE campaign_id=%s
-            ORDER BY conversions DESC, clicks DESC
+    query = '''
+                SELECT
+                    impressions.banner_id AS banner_id, 
+                    COUNT(clicks.click_id) AS clicks, 
+                    COUNT(conversions.conversion_id) AS conversions 
+                FROM impressions 
+                LEFT JOIN clicks ON impressions.campaign_id = clicks.campaign_id AND impressions.banner_id = clicks.banner_id
+                LEFT JOIN conversions ON clicks.click_id = conversions.click_id
+                WHERE impressions.campaign_id=%s AND (clicks.quarter = %s OR clicks.quarter IS NULL)
+                GROUP BY impressions.campaign_id,impressions.banner_id
+                ORDER BY conversions DESC, clicks DESC;
             '''
-    cur.execute(query, (campaign_id, ))
+    cur.execute(query, (campaign_id, quarter))
 
     rows = cur.fetchall()
 
