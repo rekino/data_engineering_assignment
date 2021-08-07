@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, g, render_template
 
 from flaskr.db import get_db
@@ -10,7 +12,14 @@ def get():
 
     cur = db.cursor()
 
-    cur.execute('SELECT DISTINCT campaign_id FROM impressions')
+    quarter = f'q{datetime.now().time().minute // 15 + 1}'
+
+    query = f'''SELECT campaign_id, COUNT(banner_id)
+            FROM banners_with_conversions_{quarter}
+            GROUP BY campaign_id
+            '''
+
+    cur.execute(query)
     campaigns = cur.fetchall()
 
     return render_template('index.html', campaigns=campaigns)
