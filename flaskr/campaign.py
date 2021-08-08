@@ -33,7 +33,7 @@ def get(campaign_id):
                 LEFT JOIN clicks ON impressions.campaign_id = clicks.campaign_id AND impressions.banner_id = clicks.banner_id
                 LEFT JOIN conversions ON clicks.click_id = conversions.click_id
                 WHERE impressions.campaign_id=%s AND (clicks.quarter = %s OR clicks.quarter IS NULL)
-                GROUP BY impressions.campaign_id,impressions.banner_id
+                GROUP BY impressions.banner_id
                 ORDER BY conversions DESC, clicks DESC;
             '''
     cur.execute(query, (campaign_id, quarter))
