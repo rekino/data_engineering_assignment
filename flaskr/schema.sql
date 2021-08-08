@@ -27,7 +27,7 @@ CREATE INDEX impressions_campaign_id
   ON public.impressions
   (campaign_id);
 
-CREATE INDEX clicks_campaign_id_quarter
+CREATE INDEX clicks_campaign_id
   ON public.clicks
   (campaign_id);
 

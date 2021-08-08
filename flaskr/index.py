@@ -12,10 +12,8 @@ def get():
 
     cur = db.cursor()
 
-    quarter = f'q{datetime.now().time().minute // 15 + 1}'
-
-    query = f'''SELECT campaign_id, COUNT(banner_id)
-            FROM banners_with_conversions_{quarter}
+    query = '''SELECT campaign_id, COUNT(banner_id)
+            FROM impressions
             GROUP BY campaign_id
             '''
 
