@@ -22,3 +22,15 @@ CREATE TABLE conversions(
     revenue          FLOAT NOT NULL,
     FOREIGN KEY (click_id) REFERENCES clicks (click_id)
 );
+
+CREATE INDEX impressions_campaign_id
+  ON public.impressions
+  (campaign_id);
+
+CREATE INDEX clicks_campaign_id_quarter
+  ON public.clicks
+  (campaign_id);
+
+CREATE INDEX conversions_click_id_conversion_id
+  ON public.conversions
+  (click_id, conversion_id);
