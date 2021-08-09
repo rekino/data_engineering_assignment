@@ -38,7 +38,7 @@ def import_clicks(conn, file, quarter):
         if i % 100 == 0:
             conn.commit()
         try:
-            cur.execute("SELECT * FROM clicks WHERE click_id=%s", (row[0], ))
+            cur.execute(f"SELECT * FROM clicks_q{quarter} WHERE click_id=%s", (row[0], ))
 
             duplicate = cur.fetchone() is not None
 
@@ -46,7 +46,7 @@ def import_clicks(conn, file, quarter):
                 logging.warning(f'duplicate click in {file.name} line {i+2}: ({row[0]}, {row[1]}, {row[2]})')
                 continue
 
-            cur.execute("INSERT INTO clicks (click_id,banner_id,campaign_id,quarter) VALUES (%s,%s,%s,%s)", (row[0], row[1], row[2], quarter))
+            cur.execute(f"INSERT INTO clicks_q{quarter} (click_id,banner_id,campaign_id) VALUES (%s,%s,%s)", (row[0], row[1], row[2]))
 
             count += 1
         except Exception as error:
@@ -64,7 +64,7 @@ def import_conversions(conn, file, quarter):
         if i % 100 == 0:
             conn.commit()
         try:
-            cur.execute("SELECT * FROM conversions WHERE conversion_id=%s", (row[0], ))
+            cur.execute(f"SELECT * FROM conversions_q{quarter} WHERE conversion_id=%s", (row[0], ))
 
             duplicate = cur.fetchone() is not None
 
@@ -72,7 +72,7 @@ def import_conversions(conn, file, quarter):
                 logging.warning(f'duplicate conversion in {file.name} line {i+2}: ({row[0]}, {row[1]}, {row[2]})')
                 continue
 
-            cur.execute("INSERT INTO conversions (conversion_id,click_id,revenue) VALUES (%s,%s,%s)", (row[0], row[1], row[2]))
+            cur.execute(f"INSERT INTO conversions_q{quarter} (conversion_id,click_id,revenue) VALUES (%s,%s,%s)", (row[0], row[1], row[2]))
 
             count += 1
         except Exception as error:

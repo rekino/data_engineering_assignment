@@ -24,19 +24,19 @@ def get(campaign_id):
 
     cur = db.cursor()
 
-    query = '''
+    query = f'''
                 SELECT
                     impressions.banner_id AS banner_id, 
-                    COUNT(clicks.click_id) AS clicks, 
-                    COUNT(conversions.conversion_id) AS conversions 
+                    COUNT(clicks_q{quarter}.click_id) AS clicks, 
+                    COUNT(conversions_q{quarter}.conversion_id) AS conversions 
                 FROM impressions 
-                LEFT JOIN clicks ON impressions.campaign_id = clicks.campaign_id AND impressions.banner_id = clicks.banner_id
-                LEFT JOIN conversions ON clicks.click_id = conversions.click_id
-                WHERE impressions.campaign_id=%s AND (clicks.quarter = %s OR clicks.quarter IS NULL)
+                LEFT JOIN clicks_q{quarter} ON impressions.campaign_id = clicks_q{quarter}.campaign_id AND impressions.banner_id = clicks_q{quarter}.banner_id
+                LEFT JOIN conversions_q{quarter} ON clicks_q{quarter}.click_id = conversions_q{quarter}.click_id
+                WHERE impressions.campaign_id=%s
                 GROUP BY impressions.banner_id
                 ORDER BY conversions DESC, clicks DESC;
             '''
-    cur.execute(query, (campaign_id, quarter))
+    cur.execute(query, (campaign_id, ))
 
     rows = cur.fetchall()
 
