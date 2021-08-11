@@ -40,8 +40,11 @@ def get(campaign_id):
 
     rows = cur.fetchall()
 
+    if len(rows) == 0:
+        return render_template('not_found.html')
+
     banners = []
-    for i in range(10):
+    for i in range(min(10, len(rows))):
         row = rows[0]
         if row[2] > 0:
             banners.append(rows.pop(0))
