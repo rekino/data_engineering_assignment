@@ -7,7 +7,7 @@ The solution is tested with Python 3.9 and PostgreSQL 12.
 The repository does not contain the csv files and images. Please extract/copy the images to 'flaskr/static/images/' and import the data into DB using the 'import_quarter.py' script.
 
 # Installation
-The '.devcontainer' folder would help you set up the application in VSCODE with the help of the 'Remote Containers" plugin. If you prefer to not use VSCODE, consult the the files in '.devcontainer' folder. The application needs a PostgreSQL instance available at '127.0.0.1:5432'.
+The '.devcontainer' folder would help you set up the application in VSCODE with the help of the "Remote Containers" plugin. If you prefer to not use VSCODE, consult the the files in the '.devcontainer' folder. The application needs a PostgreSQL instance available at '127.0.0.1:5432'.
 
 ## Usage
 
