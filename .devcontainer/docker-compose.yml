@@ -18,6 +18,10 @@ services:
     volumes:
       - ..:/workspace:cached
 
+    environment:
+      FLASK_APP: flaskr
+      FLASK_ENV: development
+
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
 
