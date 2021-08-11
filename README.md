@@ -32,6 +32,12 @@ $ python import_quarter.py -f ./csv/4 -q 4
 $ flask run
 ```
 
+### Tests
+Create a DB called "test" in your PostgreSQL instance.
+``` bash
+$ pytest
+```
+
 ### Stress test
 ``` bash
 $ python stresstest_script.py
