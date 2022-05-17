@@ -1,6 +1,6 @@
-# Data engineering assignment at DataChef
+# Data engineering assignment
 
-This is the repository of the assignment for the data engineering position at DataChef.
+This is the repository of the assignment for the data engineering position.
 
 The solution is tested with Python 3.9 and PostgreSQL 12.
 
